@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { MdDeleteForever } from "react-icons/md";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const DeleteProducts = () => {
   const [products, setProducts] = useState([]);
@@ -31,10 +33,15 @@ const DeleteProducts = () => {
       });
       setProducts(products.filter((product) => product.id !== productId));
       setError(null);
+      toast.success("Product deleted successfully!");
     } catch (error) {
       console.error("Error deleting product:", error);
       
       setError(error.response.data.error || "Failed to delete product. Please try again later.");
+      toast.error(
+        error.response?.data?.error ||
+          "Failed to delete product. Please try again later."
+      );
     }
   };
 
@@ -42,11 +49,10 @@ const DeleteProducts = () => {
 
   return (
     <div className="p-5 rounded-xl bg-gray-900 text-white">
+      <ToastContainer />
       <h2 className="font-bold text-lg mb-4">Delete Products</h2>
       {error && (
-        <div className="mb-4 p-2 bg-red-600 text-white rounded">
-          {error}
-        </div>
+        <div className="mb-4 p-2 bg-red-600 text-white rounded">{error}</div>
       )}
       <div className="overflow-x-auto">
         <table className="min-w-full table-auto bg-gray-800 rounded-lg">

@@ -11,6 +11,8 @@ import { styled } from "@mui/system";
 import DeleteIcon from "@mui/icons-material/Delete";
 import UploadIcon from "@mui/icons-material/Upload";
 import axios from "axios";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Input = styled("input")({
   display: "none",
@@ -53,7 +55,7 @@ function MediaManager() {
   const [mediaEntries, setMediaEntries] = useState([]);
   const [newImage, setNewImage] = useState(null);
   const [newVideoUrl, setNewVideoUrl] = useState("");
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = localStorage.getItem("accessToken");
   const backendUrl = import.meta.env.VITE_BACK_END_URL;
 
   useEffect(() => {
@@ -78,6 +80,12 @@ function MediaManager() {
   };
 
   const handleSave = () => {
+    if (!newImage && !newVideoUrl) {
+      // Show an error toast or do nothing if no data to save
+      toast.error("Please upload an image or enter a video URL");
+      return;
+    }
+
     const formData = new FormData();
 
     if (newImage) {
@@ -89,15 +97,16 @@ function MediaManager() {
     }
 
     axios
-      .post(`${backendUrl}/api/media/add`, formData ,{
+      .post(`${backendUrl}/api/media/add`, formData, {
         headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    })
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((response) => {
         setMediaEntries((prevEntries) => [...prevEntries, response.data]);
         setNewImage(null);
         setNewVideoUrl("");
+        toast.success("Media saved successfully");
       })
       .catch((error) => {
         console.error("Error saving media data", error);
@@ -108,13 +117,14 @@ function MediaManager() {
     axios
       .delete(`${backendUrl}/api/media/delete/${id}`, {
         headers: {
-            'Authorization': `Bearer ${accessToken}`
-        }
-    })
+          Authorization: `Bearer ${accessToken}`,
+        },
+      })
       .then((response) => {
         setMediaEntries((prevEntries) =>
           prevEntries.filter((entry) => entry.id !== id)
         );
+        toast.success("Media Deleted successfully");
       })
       .catch((error) => {
         console.error("Error deleting image", error);
@@ -197,9 +207,12 @@ function MediaManager() {
               </Grid>
             ))}
           </Grid>
-          <Button variant="outlined" color="error" onClick={() => handleDelete(media.id)}>
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleDelete(media.id)}
+          >
             Delete Media Entry
-            
           </Button>
         </Box>
       ))}
