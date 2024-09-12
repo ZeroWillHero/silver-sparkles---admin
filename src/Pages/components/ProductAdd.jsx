@@ -9,6 +9,8 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductAdd = ({ onSubmit }) => {
   const [product, setProduct] = useState({
@@ -145,7 +147,7 @@ const ProductAdd = ({ onSubmit }) => {
         },
       });
       if (response.ok) {
-        console.log("Product added successfully");
+        toast.success("Product added successfully!");
         setProduct({
           title: "",
           category: "",
@@ -164,10 +166,10 @@ const ProductAdd = ({ onSubmit }) => {
           images: [null, null, null, null],
         });
       } else {
-        console.error("Failed to add product");
+        toast.error("Failed to add product.");
       }
     } catch (error) {
-      console.error("Error:", error);
+      toast.error("Error: " + error.message);
     }
   };
 
@@ -216,7 +218,7 @@ const ProductAdd = ({ onSubmit }) => {
       setProduct({ ...product, images: updatedImages });
       setCropping(false);
     } catch (e) {
-      console.error(e);
+      toast.error("Error cropping image: " + e.message);
     }
   };
 

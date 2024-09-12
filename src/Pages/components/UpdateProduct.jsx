@@ -12,6 +12,8 @@ import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormHelperText from "@mui/material/FormHelperText";
 import Checkbox from "@mui/material/Checkbox";
+//import { toast } from "react-toastify";
+//import "react-toastify/dist/ReactToastify.css";
 
 const UpdateProduct = ({ products }) => {
   const backendUrl = import.meta.env.VITE_BACK_END_URL;

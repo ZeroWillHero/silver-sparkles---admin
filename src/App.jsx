@@ -6,6 +6,8 @@ import { useState } from "react";
 import { FaToggleOn } from "react-icons/fa";
 import { FaToggleOff } from "react-icons/fa6";
 import useAuth from './auth/useAuth';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   useAuth();
@@ -47,6 +49,7 @@ function App() {
       >
         <Outlet />
       </main>
+      <ToastContainer/>
     </div>
   );
 }
